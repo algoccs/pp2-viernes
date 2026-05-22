@@ -131,3 +131,26 @@ def create_links():
         close()
         print('Cuestionarios creados!')
 
+def get_next_question(question_id=0, quiz_id=1):
+    open()
+    query = '''
+        SELECT
+            quiz_content.id,
+            question.question_name,
+            question.correct,
+            question.wrong1,
+            question.wrong2,
+            question.wrong3
+        FROM quiz_content JOIN question
+        ON quiz_content.question_id = question.id
+        WHERE quiz_content.id > ? AND quiz_content.quiz_id = ?
+        ORDER BY quiz_content.id
+        LIMIT 1'''
+    cursor.execute(query, [question_id, quiz_id])
+    result = cursor.fetchone()
+    close()
+    return result
+
+
+
+
