@@ -112,4 +112,22 @@ def destroy_db():
     print('😘')
 
 def create_links():
-    pass
+    links = []
+    link = input('Quieres crear un questionario? (y/n) ')
+
+    while link.lower() == 'y':
+        quiz_id = int(input('Ingrese el ID del quiz: '))
+        question_id = int(input('Ingrese el ID de la pregunta: '))
+
+        links.append((quiz_id, question_id))
+        link = input('Quieres agregar otra pregunta? (y/n)')
+    
+    if links:
+        open()
+        cursor.executemany('''
+            INSERT INTO quiz_content (quiz_id, question_id)
+            VALUES (?, ?);''', links)
+        conn.commit()
+        close()
+        print('Cuestionarios creados!')
+
