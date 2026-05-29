@@ -201,8 +201,11 @@ def fetch_data(query, data=None):
 
     return result
 
-if __name__ =='__main__':
+def get_quises():
+    return fetch_data('SELECT * FROM quiz;')
 
-    print(fetch_data('SELECT * FROM quiz_content;'))
+
+if __name__ =='__main__':
+    quiz = get_quises()
 
 
