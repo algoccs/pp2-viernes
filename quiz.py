@@ -8,6 +8,7 @@ app.config['SECRET_KEY'] = 'NoTieneClave'
 def start_quiz(quiz_id):
     session['quiz'] = quiz_id
     session['prev_question'] = 0
+
 def end_quiz():
     session.clear()
 
@@ -15,28 +16,26 @@ def end_quiz():
 def form_html():
     quises = get_quises()
 
+    options = ''
     for id, name in quises:
+        options += f'<option value="{id}">{name}</option>\n'
 
-    
-    html_template = '''
+
+    html_template = f'''
         <html lang="en">
-
         <body>
             <h2>Seleccione un cuestionario:</h2>
             <form action="/" method="post">
                 <select name="quiz">
-                    <option value="1">Quiz 1</option>
-                    <option value="2">Quiz 2</option>
-                    <option value="3">Quiz 3</option>
+                    {options}
                 </select>
                 <p><input type="submit" value="Seleccionar"></p>
             </form>
         </body>
-
         </html>
     '''
 
-    return quiz_form
+    return html_template
 
 def index():
     if request.method == 'GET':
@@ -44,6 +43,8 @@ def index():
         return form_html()
 
     else:
+        quiz_id = request.form.get('quiz')
+        start_quiz(quiz_id)
         return redirect(url_for('test'))
 
 def test():
@@ -53,7 +54,7 @@ def test():
     else:
         session['prev_question'] = result[0]
 
-    return f'{result[1]}: {result[2]}'
+    return f'<h1>{result}</h1>'
 
     
 def result():
