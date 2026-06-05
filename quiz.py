@@ -1,15 +1,50 @@
 from flask import Flask, redirect, url_for, session, request
-from database import get_next_question
+from database import get_next_question, get_quises
 
 # TRABAJANDO CON SESSION
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'NoTieneClave'
 
-def index():
-    session['quiz'] = 1
+def start_quiz(quiz_id):
+    session['quiz'] = quiz_id
     session['prev_question'] = 0
+def end_quiz():
+    session.clear()
 
-    return '<a href="/test">Click para inicar el questionario</a>'
+
+def form_html():
+    quises = get_quises()
+
+    for id, name in quises:
+
+    
+    html_template = '''
+        <html lang="en">
+
+        <body>
+            <h2>Seleccione un cuestionario:</h2>
+            <form action="/" method="post">
+                <select name="quiz">
+                    <option value="1">Quiz 1</option>
+                    <option value="2">Quiz 2</option>
+                    <option value="3">Quiz 3</option>
+                </select>
+                <p><input type="submit" value="Seleccionar"></p>
+            </form>
+        </body>
+
+        </html>
+    '''
+
+    return quiz_form
+
+def index():
+    if request.method == 'GET':
+        end_quiz()
+        return form_html()
+
+    else:
+        return redirect(url_for('test'))
 
 def test():
     result = get_next_question(session['prev_question'], session['quiz'])
@@ -25,7 +60,7 @@ def result():
     return 'RESULTADO DEL TEST'
 
 
-app.add_url_rule('/', 'index', index)
+app.add_url_rule('/', 'index', index, methods=['GET', 'POST'])
 app.add_url_rule('/test', 'test', test)
 app.add_url_rule('/result', 'result', result)
 
