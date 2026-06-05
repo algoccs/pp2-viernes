@@ -125,13 +125,13 @@ def add_questions():
 def add_links(): # ESTRUCTURAR CUESTIONARIOS
     links = []
 
-    link = input('Desea ingresar un enlace? (y/n): ')
+    link = input('Desea ingresar una pregunta a un questionario? (y/n): ')
     while link.lower() == 'y':
         quiz_id = int(input('ID del quiz: ')) 
         question_id = int(input('ID de la pregunta: ')) 
 
         links.append((quiz_id, question_id))
-        link = input('Desea ingresar otro? (y/n): ')
+        link = input('Desea agregar otra? (y/n): ')
 
     if links:
         open()
@@ -208,8 +208,15 @@ def config_quiz():
     show_tables()
     add_links()
 
+def run():
+    destroy_db()
+    create_tables()
+    add_questions()
+    add_quises()
+
 if __name__ =='__main__':
-    pass
+    run()
+    config_quiz()
     
 
 
