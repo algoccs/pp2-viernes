@@ -204,8 +204,12 @@ def fetch_data(query, data=None):
 def get_quises():
     return fetch_data('SELECT * FROM quiz;')
 
+def config_quiz():
+    show_tables()
+    add_links()
 
 if __name__ =='__main__':
-    quiz = get_quises()
+    pass
+    
 
 
