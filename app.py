@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for, session, request, render_template
 from database import get_next_question, get_quises
+from random import shuffle
 
 # TRABAJANDO CON SESSION
 app = Flask(__name__)
@@ -22,6 +23,10 @@ def check_answer():
         session['totals'] += 1
         if user_answer == correct_answer:
             session['corrects'] += 1
+
+def cal_stats(totals, corrects):
+    if totals > 0:
+        return round((corrects / totals) * 100, 2)
 
 
 def index():
@@ -52,12 +57,27 @@ def test():
 
     question = result[1]
     options = list(result[2:6])
+    shuffle(options)
 
     return render_template('test.html', pregunta=question, opciones=options)
 
     
 def result():
-    return 'RESULTADO DEL TEST'
+    if 'totals' not in session:
+        return redirect.url_for('index')
+
+    totals = session['totals']
+    corrects = session['corrects']
+    incorrects = totals - corrects
+    percent = cal_stats(totals, corrects)
+
+    return render_template(
+        'result.html',
+        totales=totals,
+        correctas=corrects,
+        incorrectas=incorrects,
+        porcentaje=percent
+    )
 
 
 app.add_url_rule('/', 'index', index, methods=['GET', 'POST'])
